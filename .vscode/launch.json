@@ -9,6 +9,10 @@
             "type": "python",
             "request": "launch",
             "module": "kiwi_simple_metrics.main",
+            "env": {
+                "METRIC_DISK__THRESHOLD": "85", // workaround!
+                "METRIC_DISK__PARAMS": "[\"/var\", \"/\"]",
+            },
             "justMyCode": true
         }
     ]

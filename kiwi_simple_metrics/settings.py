@@ -24,17 +24,9 @@ class Settings(BaseSettings):
         env_nested_delimiter="__",
     )
 
-    cpu: MetricS = MetricS(
-        threshold=100,
-    )
-
-    memory: MetricS = MetricS(
-        threshold=90,
-    )
-
-    disk: ParamMS = ParamMS(
-        threshold=85,
-    )
+    cpu: MetricS = MetricS(threshold=100)
+    memory: MetricS = MetricS(threshold=90)
+    disk: ParamMS = ParamMS(threshold=85)
 
 
 SETTINGS = Settings()
