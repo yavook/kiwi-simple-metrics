@@ -1,0 +1,22 @@
+[tool.poetry]
+authors = ["Jörn-Michael Miehe <40151420+ldericher@users.noreply.github.com>"]
+description = ""
+license = "MIT"
+name = "kiwi-simple-metrics"
+packages = [{include = "kiwi_simple_metrics"}]
+readme = "README.md"
+version = "0.1.0"
+
+[tool.poetry.dependencies]
+psutil = "^5.9.5"
+python = "^3.11"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.0"
+
+[tool.poetry.scripts]
+kiwi-simple-metrics = "kiwi_simple_metrics.main:main"
+
+[build-system]
+build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core"]
