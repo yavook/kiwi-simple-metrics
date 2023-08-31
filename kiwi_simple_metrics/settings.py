@@ -8,6 +8,9 @@ class MetricSettings(BaseModel):
     # metric will be reported
     enabled: bool = True
 
+    # format string to report the metric
+    report: str = "{name}: {value:.2f}%"
+
     # if the metric value exceeds this percentage, the report fails
     threshold: float
 

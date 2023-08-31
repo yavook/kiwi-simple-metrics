@@ -1,8 +1,7 @@
 import os
 import shutil
 
-import psutil
-
+from .metrics import cpu_metric
 from .settings import SETTINGS
 
 
@@ -11,7 +10,7 @@ def main() -> None:
     print(SETTINGS.model_dump())
 
     # CPU metric
-    print(psutil.cpu_percent(interval=1))
+    print(cpu_metric())
 
     # MEM metric
 
