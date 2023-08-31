@@ -1,19 +1,12 @@
 from . import metrics
-from .settings import SETTINGS
 
 
 def main() -> None:
-    # env parameters
-    print(SETTINGS.model_dump())
-
-    # CPU metric
-    print(metrics.cpu())
-
-    # MEM metric
-    print(metrics.memory())
-
-    # DISK metric
-    print(metrics.disk())
+    print(metrics.Report.concat(
+        metrics.cpu(),
+        metrics.memory(),
+        metrics.disk(),
+    ))
 
 
 if __name__ == "__main__":

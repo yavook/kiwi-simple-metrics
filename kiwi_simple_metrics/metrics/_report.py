@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Callable, Iterator, Self
+from typing import Any, Callable, Iterator, Self
 
 from ..settings import MetricSettings
 
@@ -33,6 +33,25 @@ class ReportData:
 class Report:
     result: str
     failed: bool = False
+
+    @classmethod
+    def concat(cls, *_reports: Any) -> Self:
+        reports = [
+            report
+            for report in _reports
+            if isinstance(report, Report)
+        ]
+
+        return cls(
+            result=", ".join(
+                report.result
+                for report in reports
+            ),
+            failed=any(
+                report.failed
+                for report in reports
+            ),
+        )
 
     @classmethod
     def aggregate(
