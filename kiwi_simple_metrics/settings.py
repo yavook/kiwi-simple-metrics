@@ -20,7 +20,7 @@ class MetricSettings(BaseModel):
     inverted: bool = False
 
     # per-value format string for reporting
-    report: str = "{name}: {value:.2f}%"
+    report: str = "{name}: {value:.1f}%"
 
     # per-metric format string for reporting
     report_outer: str = "{inner}"
@@ -74,7 +74,7 @@ class MemoryMS(MetricSettings):
 class DiskMS(MetricSettings):
     name: str = "Disk Used"
     threshold: float = 85
-    report: str = "{value:.2f}% ({name})"
+    report: str = "{value:.1f}% ({name})"
     report_outer: str = "{name}: {inner}"
     count: int | None = 1
 
