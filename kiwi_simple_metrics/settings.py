@@ -52,7 +52,7 @@ class DiskMS(MetricSettings):
     name: str = "Disk Used"
     threshold: float = 85
     report_outer: str = "{name}: [{inner}]"
-    count: int = 1
+    count: int | None = 1
 
     # paths to check for disk space
     paths: list[DirectoryPath] = Field(default_factory=list)
