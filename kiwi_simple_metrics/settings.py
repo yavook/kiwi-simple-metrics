@@ -22,7 +22,7 @@ class MetricSettings(BaseModel):
     report: str = "{name}: {value:.2f}%"
 
     # per-metric format string for reporting
-    report_outer: str = "{name}: [{inner}]"
+    report_outer: str = "{inner}"
 
     # include only `count` many items (None: include all)
     count: int | None = None
@@ -36,7 +36,6 @@ class CpuMS(MetricSettings):
 class MemoryMS(MetricSettings):
     name: str = "Memory"
     threshold: float = 90
-    report_outer: str = "{inner}"
 
     # how to handle swap space
     # exclude: swap space is not reported
@@ -52,6 +51,7 @@ class MemoryMS(MetricSettings):
 class DiskMS(MetricSettings):
     name: str = "Disk Used"
     threshold: float = 85
+    report_outer: str = "{name}: [{inner}]"
     count: int = 1
 
     # paths to check for disk space

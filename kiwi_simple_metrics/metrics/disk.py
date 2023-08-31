@@ -1,10 +1,11 @@
 import os
+from typing import Iterator
 
 from ..settings import SETTINGS
 from ._report import Report, ReportData
 
 
-def _hwdata() -> list[ReportData]:
+def _hwdata() -> Iterator[ReportData]:
     def get_path_statvfs(path: os.PathLike) -> dict[str, float]:
         sv = os.statvfs(path)
         return {
@@ -12,7 +13,7 @@ def _hwdata() -> list[ReportData]:
             "total": sv.f_blocks,
         }
 
-    return sorted([
+    yield from sorted([
         ReportData.from_free_total(
             name=str(path),
             **get_path_statvfs(path),
@@ -21,12 +22,7 @@ def _hwdata() -> list[ReportData]:
 
 
 def disk() -> Report | None:
-    if not SETTINGS.disk.enabled:
-        return None
-
-    data = _hwdata()
-
     return Report.aggregate(
         settings=SETTINGS.disk,
-        data=data,
+        get_data=_hwdata,
     )

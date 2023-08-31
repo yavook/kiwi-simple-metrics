@@ -1,5 +1,5 @@
-from dataclasses import dataclass, field
-from typing import Self
+from dataclasses import dataclass
+from typing import Callable, Iterator, Self
 
 from ..settings import MetricSettings
 
@@ -17,35 +17,39 @@ class ReportData:
         )
 
     def report(self, settings: MetricSettings) -> "Report":
-        result = settings.report.format(
-            name=self.name,
-            value=self.value,
+        return Report(
+            result=settings.report.format(
+                name=self.name,
+                value=self.value,
+            ),
+            failed=(
+                self.value > settings.threshold and not settings.inverted
+                or self.value < settings.threshold and settings.inverted
+            ),
         )
 
-        return Report(result, failed=(
-            self.value > settings.threshold and not settings.inverted
-            or self.value < settings.threshold and settings.inverted
-        ))
 
-
-@dataclass(slots=True, frozen=True)
+@dataclass(slots=True, kw_only=True, frozen=True)
 class Report:
     result: str
-    failed: bool = field(default=False, kw_only=True)
+    failed: bool = False
 
     @classmethod
     def aggregate(
         cls, *,
         settings: MetricSettings,
-        data: list[ReportData],
-    ) -> Self:
+        get_data: Callable[[], Iterator[ReportData]],
+    ) -> Self | None:
+        if not settings.enabled:
+            return None
+
         reports = [
             data.report(settings)
-            for data in data
+            for data in get_data()
         ]
 
         return cls(
-            settings.report_outer.format(
+            result=settings.report_outer.format(
                 name=settings.name,
                 inner=", ".join(
                     report.result
