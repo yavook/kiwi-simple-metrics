@@ -1,4 +1,4 @@
-from .metrics import cpu_metric, disk_metric
+from . import metrics
 from .settings import SETTINGS
 
 
@@ -7,12 +7,12 @@ def main() -> None:
     print(SETTINGS.model_dump())
 
     # CPU metric
-    print(cpu_metric())
+    print(metrics.cpu())
 
     # MEM metric
 
     # DISK metric
-    print(disk_metric())
+    print(metrics.disk())
 
 
 if __name__ == "__main__":
