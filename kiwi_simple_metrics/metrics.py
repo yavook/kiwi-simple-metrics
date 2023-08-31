@@ -17,10 +17,7 @@ def _report(
     settings: MetricSettings,
     name: str,
     value: float,
-) -> Report | None:
-    if not settings.enabled:
-        return None
-
+) -> Report:
     result = settings.report.format(name=name, value=value)
 
     if (
@@ -34,6 +31,9 @@ def _report(
 
 
 def cpu_metric() -> Report | None:
+    if not SETTINGS.cpu.enabled:
+        return None
+
     value = psutil.cpu_percent(interval=1)
     return _report(
         settings=SETTINGS.cpu,
@@ -46,26 +46,23 @@ def disk_metric() -> Report | None:
     if not SETTINGS.disk.enabled:
         return None
 
-    def vfs_to_percent(sv: os.statvfs_result) -> float:
+    def path_to_free_percent(path: os.PathLike) -> float:
         try:
+            sv = os.statvfs(path)
             return sv.f_bavail / sv.f_blocks * 100
         except ZeroDivisionError:
             return 0
 
     data = sorted([
-        (str(path), vfs_to_percent(os.statvfs(path)))
+        (str(path), path_to_free_percent(path))
         for path in SETTINGS.disk.paths
     ], key=lambda d: d[1])
 
-    reports = [
-        report
-        for path, percent in data
-        if (report := _report(
-            settings=SETTINGS.disk,
-            name=path,
-            value=percent,
-        )) is not None
-    ]
+    reports = [_report(
+        settings=SETTINGS.disk,
+        name=path,
+        value=percent,
+    ) for path, percent in data]
 
     return Report(
         ", ".join(report.result for report in reports),
