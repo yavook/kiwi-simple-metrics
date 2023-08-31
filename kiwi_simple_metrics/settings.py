@@ -31,7 +31,7 @@ class Settings(BaseSettings):
 
     cpu: MetricSettings = MetricSettings(threshold=math.inf)
     memory: MetricSettings = MetricSettings(threshold=90)
-    disk: DiskMS = DiskMS(threshold=85)
+    disk: DiskMS = DiskMS(threshold=15, inverted=True)
 
 
 SETTINGS = Settings()

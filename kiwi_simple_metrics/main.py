@@ -1,7 +1,4 @@
-import os
-import shutil
-
-from .metrics import cpu_metric
+from .metrics import cpu_metric, disk_metric
 from .settings import SETTINGS
 
 
@@ -15,23 +12,7 @@ def main() -> None:
     # MEM metric
 
     # DISK metric
-    # TODO test this using timeit
-    for path in SETTINGS.disk.paths:
-        try:
-            sv = os.statvfs(path)
-            percent = sv.f_bavail / sv.f_blocks * 100
-        except ZeroDivisionError:
-            percent = 0
-
-        print(f"{path} Free (sv): {percent:.2f} %")
-
-        try:
-            total, _, free = shutil.disk_usage(path)
-            percent = free / total * 100
-        except ZeroDivisionError:
-            percent = 0
-
-        print(f"{path} Free (du): {percent:.2f} %")
+    print(disk_metric())
 
 
 if __name__ == "__main__":
