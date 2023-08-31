@@ -27,7 +27,7 @@ def memory() -> Report | None:
             )
         }
 
-    else:
+    else:  # SETTINGS.memory.swap == "include"
         data = {
             SETTINGS.memory.name_ram: vmem.percent,
             SETTINGS.memory.name_swap: swap.percent,
