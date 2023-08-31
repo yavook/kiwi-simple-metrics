@@ -11,6 +11,7 @@
             "module": "kiwi_simple_metrics.main",
             "env": {
                 "METRIC__INTERVAL": "5",
+                "METRIC__QUIET": "False",
                 "METRIC__DISK__PATHS": "[\"/var\", \"/\", \"/dev\"]",
             },
             "justMyCode": true

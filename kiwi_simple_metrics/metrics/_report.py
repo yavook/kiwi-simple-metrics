@@ -34,6 +34,14 @@ class Report:
     result: str
     failed: bool = False
 
+    def __str__(self) -> str:
+        state = "OK" if not self.failed else "FAIL"
+
+        return SETTINGS.report_stdout.format(
+            state=state,
+            result=self.result,
+        )
+
     @classmethod
     def concat(cls, *_reports: Any) -> Self:
         reports = [

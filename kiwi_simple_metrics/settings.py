@@ -91,6 +91,12 @@ class Settings(BaseSettings):
     # time between gathering reports
     interval: float = 600
 
+    # if False, prints reports to stdout
+    quiet: bool = True
+
+    # how to format reports to stdout
+    report_stdout: str = "[{state}] {result}"
+
     # separates metrics and values in reports
     separator: str = ", "
 

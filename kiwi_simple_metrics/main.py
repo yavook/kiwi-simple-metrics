@@ -10,11 +10,14 @@ async def run_metrics() -> None:
     while True:
         interval = asyncio.sleep(SETTINGS.interval)
 
-        print(metrics.Report.concat(
+        report = metrics.Report.concat(
             metrics.cpu(),
             metrics.memory(),
             metrics.disk(),
-        ))
+        )
+
+        if not SETTINGS.quiet:
+            print(report)
 
         await interval
 
