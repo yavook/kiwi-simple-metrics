@@ -5,6 +5,9 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class MetricSettings(BaseModel):
+    # metric name
+    name: str
+
     # metric will be reported
     enabled: bool = True
 
@@ -18,7 +21,21 @@ class MetricSettings(BaseModel):
     inverted: bool = False
 
 
+class CpuMS(MetricSettings):
+    name: str = "CPU"
+    threshold: float = math.inf
+
+
+class MemoryMS(MetricSettings):
+    name: str = "Memory"
+    threshold: float = 90
+
+
 class DiskMS(MetricSettings):
+    name: str = "Disk Free"
+    threshold: float = 15
+    inverted: bool = True
+
     # outer format string for reporting
     report_outer: str = "{name}: [{inner}]"
 
@@ -35,9 +52,9 @@ class Settings(BaseSettings):
         env_nested_delimiter="__",
     )
 
-    cpu: MetricSettings = MetricSettings(threshold=math.inf)
-    memory: MetricSettings = MetricSettings(threshold=90)
-    disk: DiskMS = DiskMS(threshold=15, inverted=True)
+    cpu: CpuMS = CpuMS()
+    memory: MemoryMS = MemoryMS()
+    disk: DiskMS = DiskMS()
 
 
 SETTINGS = Settings()

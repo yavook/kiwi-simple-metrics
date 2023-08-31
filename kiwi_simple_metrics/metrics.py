@@ -37,7 +37,7 @@ def cpu_metric() -> Report | None:
     value = psutil.cpu_percent(interval=1)
     return _report(
         settings=SETTINGS.cpu,
-        name="CPU",
+        name=SETTINGS.cpu.name,
         value=value,
     )
 
@@ -71,7 +71,7 @@ def disk_metric() -> Report | None:
 
     return Report(
         SETTINGS.disk.report_outer.format(
-            name="DISK FREE",
+            name=SETTINGS.disk.name,
             inner=report_inner,
         ),
         failed=any(

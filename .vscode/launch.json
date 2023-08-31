@@ -10,8 +10,6 @@
             "request": "launch",
             "module": "kiwi_simple_metrics.main",
             "env": {
-                "METRIC_DISK__THRESHOLD": "15", // workaround!
-                "METRIC_DISK__INVERTED": "True", // workaround!
                 "METRIC_DISK__PATHS": "[\"/var\", \"/\", \"/dev\"]",
             },
             "justMyCode": true
