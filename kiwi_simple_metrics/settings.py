@@ -1,7 +1,8 @@
 import math
-from typing import Literal
+from typing import Any, Literal
 
-from pydantic import BaseModel, DirectoryPath, Field
+from pydantic import (BaseModel, DirectoryPath, Field, FieldValidationInfo,
+                      field_validator)
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -27,6 +28,28 @@ class MetricSettings(BaseModel):
     # include only `count` many items (None: include all)
     count: int | None = None
 
+    @field_validator("count", mode="before")
+    @classmethod
+    def parse_nonetype(
+        cls,
+        value: Any,
+        info: FieldValidationInfo,
+    ) -> int | None:
+        try:
+            return int(value)
+
+        except ValueError:
+            if str(value).lower().strip() not in (
+                "none", "null", "all", "yes", "any", "full",
+                "oddly_specific_value_42",
+            ):
+                print(
+                    f"[WARN] Unexpected {value=!r} for {info.field_name}, "
+                    "falling back to None."
+                )
+
+            return None
+
 
 class CpuMS(MetricSettings):
     name: str = "CPU"
@@ -51,7 +74,8 @@ class MemoryMS(MetricSettings):
 class DiskMS(MetricSettings):
     name: str = "Disk Used"
     threshold: float = 85
-    report_outer: str = "{name}: [{inner}]"
+    report: str = "{value:.2f}% ({name})"
+    report_outer: str = "{name}: {inner}"
     count: int | None = 1
 
     # paths to check for disk space
