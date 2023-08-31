@@ -12,14 +12,20 @@ class MetricSettings(BaseModel):
     # metric will be reported
     enabled: bool = True
 
-    # format string to report the metric
-    report: str = "{name}: {value:.2f}%"
-
     # if the metric value exceeds this percentage, the report fails
     threshold: float
 
     # if True, this metric fails when the value falls below the `threshold`
     inverted: bool = False
+
+    # per-value format string for reporting
+    report: str = "{name}: {value:.2f}%"
+
+    # per-metric format string for reporting
+    report_outer: str = "{name}: [{inner}]"
+
+    # include only `count` many items (None: include all)
+    count: int | None = None
 
 
 class CpuMS(MetricSettings):
@@ -27,12 +33,7 @@ class CpuMS(MetricSettings):
     threshold: float = math.inf
 
 
-class MultiMS(MetricSettings):
-    # outer format string for reporting
-    report_outer: str = "{name}: [{inner}]"
-
-
-class MemoryMS(MultiMS):
+class MemoryMS(MetricSettings):
     name: str = "Memory"
     threshold: float = 90
     report_outer: str = "{inner}"
@@ -48,15 +49,13 @@ class MemoryMS(MultiMS):
     name_swap: str = "Swap"
 
 
-class DiskMS(MultiMS):
+class DiskMS(MetricSettings):
     name: str = "Disk Used"
     threshold: float = 85
+    count: int = 1
 
     # paths to check for disk space
     paths: list[DirectoryPath] = Field(default_factory=list)
-
-    # include only `count` many of the paths with the least free space
-    count: int = 1
 
 
 class Settings(BaseSettings):
