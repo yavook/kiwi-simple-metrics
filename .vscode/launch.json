@@ -10,7 +10,7 @@
             "request": "launch",
             "module": "kiwi_simple_metrics.main",
             "env": {
-                "METRIC_DISK__PATHS": "[\"/var\", \"/\", \"/dev\"]",
+                "METRIC__DISK__PATHS": "[\"/var\", \"/\", \"/dev\"]",
             },
             "justMyCode": true
         }

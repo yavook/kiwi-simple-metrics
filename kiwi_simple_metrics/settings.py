@@ -84,10 +84,14 @@ class DiskMS(MetricSettings):
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
-        env_prefix="METRIC_",
+        env_prefix="METRIC__",
         env_nested_delimiter="__",
     )
 
+    # separates metrics and values in reports
+    separator: str = ", "
+
+    # metrics settings
     cpu: CpuMS = CpuMS()
     memory: MemoryMS = MemoryMS()
     disk: DiskMS = DiskMS()

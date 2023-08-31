@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Any, Callable, Iterator, Self
 
-from ..settings import MetricSettings
+from ..settings import SETTINGS, MetricSettings
 
 
 @dataclass(slots=True, kw_only=True)
@@ -43,7 +43,7 @@ class Report:
         ]
 
         return cls(
-            result=", ".join(
+            result=SETTINGS.separator.join(
                 report.result
                 for report in reports
             ),
@@ -70,7 +70,7 @@ class Report:
         return cls(
             result=settings.report_outer.format(
                 name=settings.name,
-                inner=", ".join(
+                inner=SETTINGS.separator.join(
                     report.result
                     for report in reports[:settings.count]
                 ),
