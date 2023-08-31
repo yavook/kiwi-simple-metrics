@@ -1,8 +1,10 @@
-from pydantic import BaseModel, Field
+import math
+
+from pydantic import BaseModel, DirectoryPath, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
-class MetricS(BaseModel):
+class MetricSettings(BaseModel):
     # metric will be reported
     enabled: bool = True
 
@@ -13,9 +15,9 @@ class MetricS(BaseModel):
     inverted: bool = False
 
 
-class ParamMS(MetricS):
-    # arbitrary parameters
-    params: list[str] = Field(default_factory=list)
+class DiskMS(MetricSettings):
+    # paths to check for disk space
+    paths: list[DirectoryPath] = Field(default_factory=list)
 
 
 class Settings(BaseSettings):
@@ -24,9 +26,9 @@ class Settings(BaseSettings):
         env_nested_delimiter="__",
     )
 
-    cpu: MetricS = MetricS(threshold=100)
-    memory: MetricS = MetricS(threshold=90)
-    disk: ParamMS = ParamMS(threshold=85)
+    cpu: MetricSettings = MetricSettings(threshold=math.inf)
+    memory: MetricSettings = MetricSettings(threshold=90)
+    disk: DiskMS = DiskMS(threshold=85)
 
 
 SETTINGS = Settings()

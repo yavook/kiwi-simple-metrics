@@ -17,7 +17,7 @@ def main() -> None:
 
     # DISK metric
     # TODO test this using timeit
-    for path in SETTINGS.disk.params:
+    for path in SETTINGS.disk.paths:
         try:
             sv = os.statvfs(path)
             percent = sv.f_bavail / sv.f_blocks * 100
