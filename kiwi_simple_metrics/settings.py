@@ -1,8 +1,8 @@
 import math
 from typing import Any, Literal
 
-from pydantic import (BaseModel, DirectoryPath, Field, FieldValidationInfo,
-                      field_validator)
+from pydantic import (AnyUrl, BaseModel, DirectoryPath, Field,
+                      FieldValidationInfo, field_validator)
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -90,6 +90,21 @@ class LogSettings(BaseModel):
     format: str = "[{state}] {result}"
 
 
+class WebhookSettings(BaseModel):
+    # webhooks to ping on success/on failure
+    url: AnyUrl | None = None
+    fail: AnyUrl | None = None
+
+    # allow insecure/self-signed webhook targets
+    insecure: bool = False
+
+    def get_url(self, failed: bool) -> AnyUrl | None:
+        if failed:
+            return self.fail
+
+        return self.url
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_prefix="METRIC__",
@@ -109,6 +124,9 @@ class Settings(BaseSettings):
     cpu: CpuMS = CpuMS()
     memory: MemoryMS = MemoryMS()
     disk: DiskMS = DiskMS()
+
+    # pinging webhooks
+    webhook: WebhookSettings = WebhookSettings()
 
 
 SETTINGS = Settings()

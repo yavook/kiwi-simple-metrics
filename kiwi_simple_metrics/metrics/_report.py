@@ -37,13 +37,13 @@ class Report:
     def __str__(self) -> str:
         state = "OK" if not self.failed else "FAIL"
 
-        return SETTINGS.report_stdout.format(
+        return SETTINGS.log.format.format(
             state=state,
             result=self.result,
         )
 
     @classmethod
-    def concat(cls, *_reports: Any) -> Self:
+    def summary(cls, *_reports: Any) -> Self:
         reports = [
             report
             for report in _reports
