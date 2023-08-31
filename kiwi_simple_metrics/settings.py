@@ -35,6 +35,17 @@ class MultiMS(MetricSettings):
 class MemoryMS(MultiMS):
     name: str = "Memory"
     threshold: float = 90
+    report_outer: str = "{inner}"
+
+    # how to handle swap space
+    # exclude: swap space is not reported
+    # include: swap space is reported separately
+    # combine: ram and swap are combined
+    swap: Literal["exclude", "include", "combine"] = "include"
+
+    # names for telling apart ram and swap space
+    name_ram: str = "RAM"
+    name_swap: str = "Swap"
 
 
 class DiskMS(MultiMS):

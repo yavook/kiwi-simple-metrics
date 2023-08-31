@@ -10,6 +10,7 @@ def main() -> None:
     print(metrics.cpu())
 
     # MEM metric
+    print(metrics.memory())
 
     # DISK metric
     print(metrics.disk())
