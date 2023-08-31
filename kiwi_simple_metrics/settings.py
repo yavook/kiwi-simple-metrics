@@ -88,6 +88,9 @@ class Settings(BaseSettings):
         env_nested_delimiter="__",
     )
 
+    # time between gathering reports
+    interval: float = 600
+
     # separates metrics and values in reports
     separator: str = ", "
 
