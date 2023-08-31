@@ -16,7 +16,7 @@ async def run_metrics() -> None:
             metrics.disk(),
         )
 
-        if not SETTINGS.quiet:
+        if SETTINGS.log.enabled:
             print(report)
 
         await interval
