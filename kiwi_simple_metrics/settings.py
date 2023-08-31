@@ -1,4 +1,5 @@
 import math
+from typing import Literal
 
 from pydantic import BaseModel, DirectoryPath, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -26,18 +27,19 @@ class CpuMS(MetricSettings):
     threshold: float = math.inf
 
 
-class MemoryMS(MetricSettings):
+class MultiMS(MetricSettings):
+    # outer format string for reporting
+    report_outer: str = "{name}: [{inner}]"
+
+
+class MemoryMS(MultiMS):
     name: str = "Memory"
     threshold: float = 90
 
 
-class DiskMS(MetricSettings):
-    name: str = "Disk Free"
-    threshold: float = 15
-    inverted: bool = True
-
-    # outer format string for reporting
-    report_outer: str = "{name}: [{inner}]"
+class DiskMS(MultiMS):
+    name: str = "Disk Used"
+    threshold: float = 85
 
     # paths to check for disk space
     paths: list[DirectoryPath] = Field(default_factory=list)

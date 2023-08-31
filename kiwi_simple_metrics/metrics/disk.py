@@ -8,17 +8,17 @@ def disk() -> Report | None:
     if not SETTINGS.disk.enabled:
         return None
 
-    def path_to_free_percent(path: os.PathLike) -> float:
+    def path_to_used_percent(path: os.PathLike) -> float:
         try:
             sv = os.statvfs(path)
-            return sv.f_bavail / sv.f_blocks * 100
+            return (1 - sv.f_bavail / sv.f_blocks) * 100
         except ZeroDivisionError:
             return 0
 
     data = sorted([
-        (str(path), path_to_free_percent(path))
+        (str(path), path_to_used_percent(path))
         for path in SETTINGS.disk.paths
-    ], key=lambda d: d[1])
+    ], key=lambda d: d[1], reverse=True)
 
     reports = [Report.new(
         settings=SETTINGS.disk,
