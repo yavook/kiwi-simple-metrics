@@ -19,8 +19,14 @@ class MetricSettings(BaseModel):
 
 
 class DiskMS(MetricSettings):
+    # outer format string for reporting
+    report_outer: str = "{name}: [{inner}]"
+
     # paths to check for disk space
     paths: list[DirectoryPath] = Field(default_factory=list)
+
+    # include only `count` many of the paths with the least free space
+    count: int = 1
 
 
 class Settings(BaseSettings):

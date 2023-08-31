@@ -64,7 +64,18 @@ def disk_metric() -> Report | None:
         value=percent,
     ) for path, percent in data]
 
+    report_inner = ", ".join(
+        report.result
+        for report in reports[:SETTINGS.disk.count]
+    )
+
     return Report(
-        ", ".join(report.result for report in reports),
-        failed=any(report.failed for report in reports),
+        SETTINGS.disk.report_outer.format(
+            name="DISK FREE",
+            inner=report_inner,
+        ),
+        failed=any(
+            report.failed
+            for report in reports
+        ),
     )
