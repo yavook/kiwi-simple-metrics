@@ -1,5 +1,8 @@
+import urllib.parse
 from dataclasses import dataclass
 from typing import Any, Callable, Iterator, Self
+
+import requests
 
 from ..settings import SETTINGS, MetricSettings
 
@@ -111,4 +114,16 @@ class Report:
                 report.failed
                 for report in reports
             ),
+        )
+
+    def push_webhook(self) -> None:
+        if (url := SETTINGS.webhook.url if not self.failed
+                else SETTINGS.webhook.fail) is None:
+            return
+
+        requests.get(
+            url=str(url).format(
+                urllib.parse.quote_plus(self.result)
+            ),
+            verify=not SETTINGS.webhook.insecure,
         )

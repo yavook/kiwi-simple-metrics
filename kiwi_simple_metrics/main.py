@@ -1,9 +1,6 @@
 #!/usr/bin/python3
 
 import asyncio
-import urllib.parse
-
-import requests
 
 from . import metrics
 from .settings import SETTINGS
@@ -22,14 +19,8 @@ def handle_report() -> None:
     if SETTINGS.log.enabled:
         print(report)
 
-    # maybe push this to a webhook
-    if (url := SETTINGS.webhook.get_url(failed=report.failed)) is not None:
-        requests.get(
-            url=str(url).format(
-                urllib.parse.quote_plus(report.result)
-            ),
-            verify=not SETTINGS.webhook.insecure,
-        )
+    # maybe push this to the configured webhook
+    report.push_webhook()
 
 
 async def run_metrics() -> None:

@@ -16,9 +16,3 @@ class WebhookSettings(BaseModel):
 
     # allow insecure/self-signed webhook targets
     insecure: bool = False
-
-    def get_url(self, failed: bool) -> AnyUrl | None:
-        if failed:
-            return self.fail
-
-        return self.url
