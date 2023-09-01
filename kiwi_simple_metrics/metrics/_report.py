@@ -8,23 +8,50 @@ from ..settings import SETTINGS, MetricSettings
 class ReportData:
     name: str
     value: float
+    threshold: float
+    inverted: bool
+    format: str
 
     @classmethod
-    def from_free_total(cls, *, name: str, free: float, total: float) -> Self:
+    def from_settings(
+        cls, *,
+        name: str,
+        value: float,
+        settings: MetricSettings,
+    ) -> Self:
         return cls(
             name=name,
-            value=(total - free) / total * 100,
+            value=value,
+            threshold=settings.threshold,
+            inverted=settings.inverted,
+            format=settings.report,
         )
 
-    def report(self, settings: MetricSettings) -> "Report":
+    @classmethod
+    def from_free_total(
+        cls, *,
+        name: str,
+        free: float,
+        total: float,
+        settings: MetricSettings,
+
+    ) -> Self:
+        return cls.from_settings(
+            name=name,
+            value=(total - free) / total * 100,
+            settings=settings,
+        )
+
+    @property
+    def report(self) -> "Report":
         return Report(
-            result=settings.report.format(
+            result=self.format.format(
                 name=self.name,
                 value=self.value,
             ),
             failed=(
-                self.value > settings.threshold and not settings.inverted
-                or self.value < settings.threshold and settings.inverted
+                self.value > self.threshold and not self.inverted
+                or self.value < self.threshold and self.inverted
             ),
         )
 
@@ -70,10 +97,7 @@ class Report:
         if not settings.enabled:
             return None
 
-        reports = [
-            data.report(settings)
-            for data in get_data()
-        ]
+        reports = [data.report for data in get_data()]
 
         return cls(
             result=settings.report_outer.format(

@@ -7,9 +7,10 @@ from ._report import Report, ReportData
 
 
 def _hwdata() -> Iterator[ReportData]:
-    yield ReportData(
+    yield ReportData.from_settings(
         name=SETTINGS.cpu.name,
         value=psutil.cpu_percent(interval=1),
+        settings=SETTINGS.cpu,
     )
 
 

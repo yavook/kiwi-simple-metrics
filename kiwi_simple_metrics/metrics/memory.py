@@ -11,9 +11,10 @@ def _hwdata() -> Iterator[ReportData]:
     swap = psutil.swap_memory()
 
     if SETTINGS.memory.swap == "exclude":
-        yield ReportData(
+        yield ReportData.from_settings(
             name=SETTINGS.memory.name_ram,
             value=vmem.percent,
+            settings=SETTINGS.memory,
         )
 
     elif SETTINGS.memory.swap == "combine":
@@ -21,16 +22,19 @@ def _hwdata() -> Iterator[ReportData]:
             name=SETTINGS.memory.name,
             free=vmem.available + swap.free,
             total=vmem.total + swap.total,
+            settings=SETTINGS.memory,
         )
 
     else:  # SETTINGS.memory.swap == "include"
-        yield ReportData(
+        yield ReportData.from_settings(
             name=SETTINGS.memory.name_ram,
             value=vmem.percent,
+            settings=SETTINGS.memory,
         )
-        yield ReportData(
+        yield ReportData.from_settings(
             name=SETTINGS.memory.name_swap,
             value=swap.percent,
+            settings=SETTINGS.memory,
         )
 
 

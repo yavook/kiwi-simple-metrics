@@ -17,6 +17,7 @@ def _hwdata() -> Iterator[ReportData]:
         ReportData.from_free_total(
             name=str(path),
             **get_path_statvfs(path),
+            settings=SETTINGS.disk,
         ) for path in SETTINGS.disk.paths
     ], key=lambda d: d.value, reverse=True)
 

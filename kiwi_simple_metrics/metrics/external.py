@@ -8,6 +8,9 @@ def _hwdata() -> Iterator[ReportData]:
     yield ReportData(
         name="Foo",
         value=69.42,
+        threshold=80,
+        inverted=False,
+        format=SETTINGS.cpu.report,
     )
 
 
