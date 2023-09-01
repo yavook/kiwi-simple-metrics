@@ -79,3 +79,8 @@ class DiskMS(MetricSettings):
 
     # paths to check for disk space
     paths: list[DirectoryPath] = Field(default_factory=list)
+
+
+class ScriptMS(MetricSettings):
+    name: str = "External Script"
+    threshold: float = 0
