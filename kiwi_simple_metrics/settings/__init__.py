@@ -23,6 +23,7 @@ class Settings(BaseSettings):
     cpu: metric.CpuMS = metric.CpuMS()
     memory: metric.MemoryMS = metric.MemoryMS()
     disk: metric.DiskMS = metric.DiskMS()
+    external: metric.ExternalMS = metric.ExternalMS()
 
     # pinging webhooks
     webhook: misc.WebhookSettings = misc.WebhookSettings()

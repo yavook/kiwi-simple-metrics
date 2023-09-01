@@ -15,6 +15,7 @@ def handle_report() -> None:
         metrics.cpu(),
         metrics.memory(),
         metrics.disk(),
+        metrics.external(),
     )
 
     # maybe print this to stdout
