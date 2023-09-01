@@ -1,9 +1,8 @@
 import math
 from typing import Any, Literal
 
-from pydantic import (AnyUrl, BaseModel, DirectoryPath, Field,
-                      FieldValidationInfo, field_validator)
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic import (BaseModel, DirectoryPath, Field, FieldValidationInfo,
+                      field_validator)
 
 
 class MetricSettings(BaseModel):
@@ -80,53 +79,3 @@ class DiskMS(MetricSettings):
 
     # paths to check for disk space
     paths: list[DirectoryPath] = Field(default_factory=list)
-
-
-class LogSettings(BaseModel):
-    # if True, prints reports to stdout
-    enabled: bool = False
-
-    # how to format reports to stdout
-    format: str = "[{state}] {result}"
-
-
-class WebhookSettings(BaseModel):
-    # webhooks to ping on success/on failure
-    url: AnyUrl | None = None
-    fail: AnyUrl | None = None
-
-    # allow insecure/self-signed webhook targets
-    insecure: bool = False
-
-    def get_url(self, failed: bool) -> AnyUrl | None:
-        if failed:
-            return self.fail
-
-        return self.url
-
-
-class Settings(BaseSettings):
-    model_config = SettingsConfigDict(
-        env_prefix="METRIC__",
-        env_nested_delimiter="__",
-    )
-
-    # time between gathering reports
-    interval: float = 600
-
-    # reporting to stdout
-    log: LogSettings = LogSettings()
-
-    # separates metrics and values in reports
-    separator: str = ", "
-
-    # metrics settings
-    cpu: CpuMS = CpuMS()
-    memory: MemoryMS = MemoryMS()
-    disk: DiskMS = DiskMS()
-
-    # pinging webhooks
-    webhook: WebhookSettings = WebhookSettings()
-
-
-SETTINGS = Settings()
