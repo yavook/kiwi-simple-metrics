@@ -9,37 +9,40 @@ from . import metrics
 from .settings import SETTINGS
 
 
-async def run_metrics() -> None:
-    while True:
-        interval = asyncio.sleep(SETTINGS.interval)
+def handle_report() -> None:
+    # create single report from metrics
+    report = metrics.Report.summary(
+        metrics.cpu(),
+        metrics.memory(),
+        metrics.disk(),
+    )
 
-        # create single report from metrics
-        report = metrics.Report.summary(
-            metrics.cpu(),
-            metrics.memory(),
-            metrics.disk(),
+    # maybe print this to stdout
+    if SETTINGS.log.enabled:
+        print(report)
+
+    # maybe push this to a webhook
+    if (url := SETTINGS.webhook.get_url(failed=report.failed)) is not None:
+        requests.get(
+            url=str(url).format(
+                urllib.parse.quote_plus(report.result)
+            ),
+            verify=not SETTINGS.webhook.insecure,
         )
 
-        # maybe print this to stdout
-        if SETTINGS.log.enabled:
-            print(report)
 
-        # maybe push this to a webhook
-        if (url := SETTINGS.webhook.get_url(failed=report.failed)) is not None:
-            requests.get(
-                url=str(url).format(
-                    urllib.parse.quote_plus(report.result)
-                ),
-                verify=not SETTINGS.webhook.insecure,
-            )
+async def run_metrics() -> None:
+    loop = asyncio.get_running_loop()
 
-        await interval
+    while True:
+        await asyncio.gather(
+            asyncio.sleep(SETTINGS.interval),
+            loop.run_in_executor(None, handle_report),
+        )
 
 
 def main() -> None:
-    loop = asyncio.get_event_loop()
-    loop.create_task(run_metrics())
-    loop.run_forever()
+    asyncio.run(run_metrics())
 
 
 if __name__ == "__main__":
