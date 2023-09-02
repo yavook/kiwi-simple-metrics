@@ -5,7 +5,7 @@ license = "MIT"
 name = "kiwi-simple-metrics"
 packages = [{include = "kiwi_simple_metrics"}]
 readme = "README.md"
-version = "0.1.0"
+version = "0.1.2"
 
 [tool.poetry.dependencies]
 psutil = "^5.9.5"
