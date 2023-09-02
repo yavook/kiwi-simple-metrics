@@ -1,8 +1,8 @@
 import math
 from typing import Any, Literal
 
-from pydantic import (BaseModel, DirectoryPath, Field, FieldValidationInfo,
-                      FilePath, field_validator)
+from pydantic import (BaseModel, DirectoryPath, FieldValidationInfo, FilePath,
+                      field_validator)
 
 
 class MetricSettings(BaseModel):
@@ -54,7 +54,7 @@ class CpuMS(MetricSettings):
     name: str = "CPU"
     threshold: float = math.inf
 
-    # timespan to analyze average CPU usage
+    # timespan in seconds to measure average CPU usage
     interval: float = 1
 
 
@@ -81,21 +81,19 @@ class DiskMS(MetricSettings):
     count: int | None = 1
 
     # paths to check for disk space
-    paths: list[DirectoryPath] = Field(default_factory=list)
+    paths: list[DirectoryPath] = [DirectoryPath("/")]
 
 
 class ExternalMS(MetricSettings):
     name: str = "External Metric"
+    enabled: bool = False
     threshold: float = 0
 
+    # always include all defined external values!
+    count: None = None
+
     # path to executable files
-    executables: list[FilePath] = Field(default_factory=list)
+    executables: list[FilePath] = []
 
     # wait at most this many seconds for each executable
     timeout: int = 60
-
-    @field_validator("count", mode="after")
-    @classmethod
-    def force_none(cls, _) -> int | None:
-        """Don't accept a `count` value for the external metric!"""
-        return None

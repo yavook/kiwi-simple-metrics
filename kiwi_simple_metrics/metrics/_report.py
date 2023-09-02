@@ -102,6 +102,9 @@ class Report:
 
         reports = [data.report for data in get_data()]
 
+        if not reports:
+            return None
+
         return cls(
             result=settings.report_outer.format(
                 name=settings.name,
@@ -123,7 +126,7 @@ class Report:
 
         requests.get(
             url=str(url).format(
-                urllib.parse.quote_plus(self.result)
+                result=urllib.parse.quote_plus(self.result)
             ),
             verify=not SETTINGS.webhook.insecure,
         )

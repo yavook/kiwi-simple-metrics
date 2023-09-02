@@ -1,6 +1,6 @@
 [tool.poetry]
 authors = ["Jörn-Michael Miehe <40151420+ldericher@users.noreply.github.com>"]
-description = ""
+description = "A lightweight monitoring solution for kiwi-scp"
 license = "MIT"
 name = "kiwi-simple-metrics"
 packages = [{include = "kiwi_simple_metrics"}]
@@ -9,8 +9,8 @@ version = "0.1.0"
 
 [tool.poetry.dependencies]
 psutil = "^5.9.5"
-python = "^3.11"
 pydantic-settings = "^2.0.3"
+python = "^3.11"
 requests = "^2.31.0"
 
 [tool.poetry.group.dev.dependencies]
