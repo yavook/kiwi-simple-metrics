@@ -10,31 +10,43 @@ def _hwdata() -> Iterator[ReportData]:
     def parse_output(exe: os.PathLike) -> ReportData:
         try:
             # check exe is executable
+            # => AssertionError
             assert os.access(exe, os.X_OK)
 
-            # run exe
-            # => TimeoutExpired: execution took too long
-            execution = subprocess.run(
-                args=[exe],
-                stdout=subprocess.PIPE,
-                timeout=SETTINGS.external.timeout,
-            )
+            try:
+                # run exe
+                # => TimeoutExpired: execution took too long
+                execution = subprocess.run(
+                    args=[exe],
+                    stdout=subprocess.PIPE,
+                    timeout=SETTINGS.external.timeout,
+                )
+
+                stdout = execution.stdout
+                returncode = execution.returncode
+
+            except subprocess.TimeoutExpired as e:
+                # output might still be valid
+                assert (stdout := e.stdout) is not None
+                returncode = 0
 
             # look at the first four output lines
             # => UnicodeDecodeError: output is not decodable
-            output = execution.stdout.decode().split("\n")[:4]
+            output = stdout.decode().split("\n")[:4]
 
             # extract and check name (fail if empty)
+            # => IndexError, AssertionError
             assert (name := "".join(
                 char
                 for char in output[0]
                 if char.isprintable()
             )[:100]) != ""
 
-        except (AssertionError,
-                subprocess.TimeoutExpired,
-                UnicodeDecodeError,
-                IndexError):
+            # check exit status
+            # => AssertionError
+            assert returncode == 0
+
+        except (AssertionError, UnicodeDecodeError, IndexError):
             return ReportData.from_settings(
                 name=os.path.basename(exe)[:100],
                 value=100,
@@ -42,22 +54,22 @@ def _hwdata() -> Iterator[ReportData]:
             )
 
         try:
-            # check exit status
-            assert execution.returncode == 0
-
             # check output length
+            # => AssertionError
             assert len(output) == 4
 
             # extract threshold and value
+            # => ValueError
             threshold = float(output[1])
             value = float(output[3])
 
             # extract and check inversion
+            # => AssertionError
             assert (inverted := output[2].strip().lower()) in (
                 "normal", "inverted",
             )
 
-        except (ValueError, AssertionError):
+        except (AssertionError, ValueError):
             return ReportData.from_settings(
                 name=name,
                 value=100,
