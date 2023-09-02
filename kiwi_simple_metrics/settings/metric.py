@@ -54,7 +54,7 @@ class CpuMS(MetricSettings):
     name: str = "CPU"
     threshold: float = math.inf
 
-    # timespan to analyze average CPU usage
+    # timespan in seconds to measure average CPU usage
     interval: float = 1
 
 
