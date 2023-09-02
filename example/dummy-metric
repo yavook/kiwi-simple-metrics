@@ -1,0 +1,8 @@
+#!/bin/sh
+
+echo "Dummy" # name
+echo "95" # threshold
+echo "normal" # inversion
+awk "BEGIN{srand(); r=rand(); print r * 100}" # value
+
+exit 0

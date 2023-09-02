@@ -6,7 +6,7 @@ from .metric import MetricSettings
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
-        env_prefix="METRIC__",
+        env_prefix="METRICS__",
         env_nested_delimiter="__",
     )
 
