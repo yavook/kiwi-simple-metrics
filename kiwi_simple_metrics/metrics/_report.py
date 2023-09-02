@@ -102,6 +102,9 @@ class Report:
 
         reports = [data.report for data in get_data()]
 
+        if not reports:
+            return None
+
         return cls(
             result=settings.report_outer.format(
                 name=settings.name,

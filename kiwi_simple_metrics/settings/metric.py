@@ -1,8 +1,8 @@
 import math
 from typing import Any, Literal
 
-from pydantic import (BaseModel, DirectoryPath, Field, FieldValidationInfo,
-                      FilePath, field_validator)
+from pydantic import (BaseModel, DirectoryPath, FieldValidationInfo, FilePath,
+                      field_validator)
 
 
 class MetricSettings(BaseModel):
@@ -81,15 +81,16 @@ class DiskMS(MetricSettings):
     count: int | None = 1
 
     # paths to check for disk space
-    paths: list[DirectoryPath] = Field(default_factory=list)
+    paths: list[DirectoryPath] = [DirectoryPath("/")]
 
 
 class ExternalMS(MetricSettings):
     name: str = "External Metric"
+    enabled: bool = False
     threshold: float = 0
 
     # path to executable files
-    executables: list[FilePath] = Field(default_factory=list)
+    executables: list[FilePath] = []
 
     # wait at most this many seconds for each executable
     timeout: int = 60
