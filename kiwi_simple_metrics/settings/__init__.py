@@ -19,6 +19,9 @@ class Settings(BaseSettings):
     # separates metrics and values in reports
     separator: str = ", "
 
+    # maximum threads for concurrent metric execution
+    threads: int | None = None
+
     # metrics settings
     cpu: metric.CpuMS = metric.CpuMS()
     memory: metric.MemoryMS = metric.MemoryMS()

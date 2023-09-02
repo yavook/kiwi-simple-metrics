@@ -11,19 +11,26 @@ def run_metrics(
     executor: concurrent.futures.Executor,
     *_metrics: metrics.Metric,
 ) -> None:
-    # === conc experiment ===
+    # run metrics in executor
+    tasks = [
+        executor.submit(metric)
+        for metric in _metrics
+    ]
 
-    futures = concurrent.futures.wait(
-        executor.submit(metric) for metric in _metrics
-    ).done
+    # wait for finish
+    # pair up each result with its task index
+    results = (
+        (tasks.index(future), future.result())
+        for future in concurrent.futures.wait(tasks).done
+    )
 
-    print(list(future.result() for future in futures))
+    # extract reports in task index order
+    reports = (
+        report
+        for _, report in sorted(results, key=lambda x: x[0])
+    )
 
-    # === end conc ===
-
-    reports = (metric() for metric in _metrics)
-
-    # create single report from metrics
+    # create summary report
     report = metrics.Report.summary(*reports)
 
     # maybe print this to stdout
@@ -38,7 +45,9 @@ async def async_main_loop() -> None:
     loop = asyncio.get_running_loop()
 
     while True:
-        with concurrent.futures.ThreadPoolExecutor() as pool:
+        with concurrent.futures.ThreadPoolExecutor(
+            max_workers=SETTINGS.threads,
+        ) as pool:
             await asyncio.gather(
                 asyncio.sleep(SETTINGS.interval),
                 loop.run_in_executor(
