@@ -4,3 +4,5 @@ echo "Dummy"
 echo "95"
 echo "normal"
 awk "BEGIN{srand(); r=rand(); print r * 100}"
+
+exit 0

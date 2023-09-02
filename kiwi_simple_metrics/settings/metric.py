@@ -82,39 +82,11 @@ class DiskMS(MetricSettings):
 
 
 class ExternalMS(MetricSettings):
-    """
-    External Metric
-    =====
-
-    This metric's values are defined external executables (e.g. bash scripts).
-    Any executable with suitable output can be used as a value for this metric.
-
-    To comply, the executable's output must start with four consecutive lines,
-    holding the following information:
-
-    1. value name (max. 100 characters)
-    2. percent threshold
-    3. the string "normal" or "inverted", without quotes
-    4. percent current value
-
-    Percentages may be floating point numbers and must use a decimal point "."
-    as a separator in that case.
-
-    Non-compliance will be reported as failed values as follows:
-
-    - non-executable files are reported as the files' basename
-    - executables with generally noncompliant outputs are reported as
-      the first line of their output truncated to 100 chars
-    - failure to parse the threshold or inversion results in
-      an upper threshold of 0%
-    - failure to parse the current value results in
-      an upper threshold of 0% and a value of 100%
-    - compliant executables with non-zero exit status are still
-      reported as a failed value
-    """
-
-    name: str = "External Metrics"
+    name: str = "External Metric"
     threshold: float = 0
 
     # path to executable files
     executables: list[FilePath] = Field(default_factory=list)
+
+    # wait at most this many seconds for each executable
+    timeout: int = 60
