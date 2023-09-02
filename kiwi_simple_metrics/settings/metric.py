@@ -83,6 +83,9 @@ class DiskMS(MetricSettings):
     # paths to check for disk space
     paths: list[DirectoryPath] = [DirectoryPath("/")]
 
+    # path to be treated as filesystem root
+    vroot: DirectoryPath = DirectoryPath("/")
+
 
 class ExternalMS(MetricSettings):
     name: str = "External Metric"
