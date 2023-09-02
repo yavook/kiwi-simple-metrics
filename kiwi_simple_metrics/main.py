@@ -44,15 +44,17 @@ def run_metrics(
 async def async_main_loop() -> None:
     loop = asyncio.get_running_loop()
 
-    while True:
-        with concurrent.futures.ThreadPoolExecutor(
-            max_workers=SETTINGS.threads,
-        ) as pool:
+    with concurrent.futures.ThreadPoolExecutor(
+        max_workers=SETTINGS.threads,
+    ) as pool:
+        while True:
+            # start interval and metrics at the same time
             await asyncio.gather(
                 asyncio.sleep(SETTINGS.interval),
                 loop.run_in_executor(
                     None, run_metrics,
                     pool,
+                    # metrics are reported in this order
                     metrics.cpu,
                     metrics.memory,
                     metrics.disk,

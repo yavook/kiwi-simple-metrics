@@ -93,3 +93,9 @@ class ExternalMS(MetricSettings):
 
     # wait at most this many seconds for each executable
     timeout: int = 60
+
+    @field_validator("count", mode="after")
+    @classmethod
+    def force_none(cls, _) -> int | None:
+        """Don't accept a `count` value for the external metric!"""
+        return None
