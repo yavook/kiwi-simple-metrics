@@ -12,7 +12,6 @@
             "env": {
                 "METRIC__INTERVAL": "5",
                 "METRIC__LOG__ENABLED": "True",
-                "METRIC__DISK__PATHS": "[\"/var\", \"/\", \"/dev\"]",
                 "METRIC__EXTERNAL__EXECUTABLES": "[\"${workspaceFolder}/dummy-metric\"]",
             },
             "justMyCode": true
