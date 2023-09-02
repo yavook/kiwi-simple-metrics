@@ -10,10 +10,10 @@
             "request": "launch",
             "module": "kiwi_simple_metrics.main",
             "env": {
-                "METRIC__INTERVAL": "5",
-                "METRIC__LOG__ENABLED": "True",
-                "METRIC__EXTERNAL__ENABLED": "True",
-                "METRIC__EXTERNAL__EXECUTABLES": "[\"${workspaceFolder}/example/dummy-metric\"]",
+                "METRICS__INTERVAL": "5",
+                "METRICS__LOG__ENABLED": "True",
+                "METRICS__EXTERNAL__ENABLED": "True",
+                "METRICS__EXTERNAL__EXECUTABLES": "[\"${workspaceFolder}/example/dummy-metric\"]",
             },
             "justMyCode": true
         }
