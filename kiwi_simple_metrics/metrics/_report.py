@@ -126,7 +126,7 @@ class Report:
 
         requests.get(
             url=str(url).format(
-                urllib.parse.quote_plus(self.result)
+                result=urllib.parse.quote_plus(self.result)
             ),
             verify=not SETTINGS.webhook.insecure,
         )

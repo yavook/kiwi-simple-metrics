@@ -28,13 +28,13 @@ metrics:
   image: yavook/kiwi-simple-metrics:0.1
   environment:
     METRICS__LOG__ENABLED: "True"
-    METRICS__WEBHOOK__URL: "https://my.webhook.host/success?report={}"
-    METRICS__WEBHOOK__FAIL: "https://my.webhook.host/failure?report={}"
+    METRICS__WEBHOOK__URL: "https://my.webhook.host/success?report={result}"
+    METRICS__WEBHOOK__FAIL: "https://my.webhook.host/failure?report={result}"
 ```
 
 - same metrics as above
 - logs reports to stdout
-- triggers webhooks (`{}` is the placeholder for the result string)
+- triggers webhooks (`{result}` is the placeholder for the result string)
 
 ## Configuration
 
