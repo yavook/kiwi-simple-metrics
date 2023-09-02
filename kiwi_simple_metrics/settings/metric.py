@@ -86,6 +86,7 @@ class DiskMS(MetricSettings):
 
 class ExternalMS(MetricSettings):
     name: str = "External Metric"
+    enabled: bool = False
     threshold: float = 0
 
     # path to executable files
