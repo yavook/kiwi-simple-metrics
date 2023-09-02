@@ -45,9 +45,9 @@ These are the environment variables you most likely need:
 - `METRICS__[M]__ENABLED`, `METRICS__[M]__THRESHOLD` (with `[M]` from `CPU`, `MEMORY`, `DISK`): Enable or disable each metric, and set its failure threshold
 - `METRICS__MEMORY__SWAP`: How swap space is handled in the "memory" report (default: `include`)
 - `METRICS__DISK__PATHS`: At which paths the disk usage is measured (default: `["/"]`)
-- `METRICS__EXTERNAL__ENABLED`, `METRICS__EXTERNAL__EXECUTABLES`: Setup for `external values`, as further defined in [`metrics/external.py`](./tree/master/kiwi_simple_metrics/metrics/external.py) (default: `False`, `[]`)
+- `METRICS__EXTERNAL__ENABLED`, `METRICS__EXTERNAL__EXECUTABLES`: Setup for `external values`, as further defined in [`metrics/external.py`](./kiwi_simple_metrics/metrics/external.py) (default: `False`, `[]`)
 - `METRICS__WEBHOOK__URL`, `METRICS__WEBHOOK__FAIL`: Which webhooks to push the reports to (default: `None`, `None`)
 
-All settings can be found in the `SETTINGS` variable defined by module [`kiwi_simple_metrics.settings` in `settings/__init__.py`](./tree/master/kiwi_simple_metrics/settings/__init__.py). For default values, refer to the respective python files.
+All settings can be found in the `SETTINGS` variable defined by module [`kiwi_simple_metrics.settings` in `settings/__init__.py`](./kiwi_simple_metrics/settings/__init__.py). For default values, refer to the respective python files.
 
-Example: The above `METRICS__LOG__ENABLED` refers to `SETTINGS.log.enabled`, defined by model [`LogSettings` in `settings/misc.py`](./tree/master/kiwi_simple_metrics/settings/misc.py).
+Example: The above `METRICS__LOG__ENABLED` refers to `SETTINGS.log.enabled`, defined by model [`LogSettings` in `settings/misc.py`](./kiwi_simple_metrics/settings/misc.py).
