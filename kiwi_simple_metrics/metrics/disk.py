@@ -24,13 +24,18 @@ def _hwdata() -> Iterator[ReportData]:
 
         return str(path)
 
-    yield from sorted([
-        ReportData.from_free_total(
-            name=get_path_name(path),
-            **get_path_statvfs(path),
-            settings=SETTINGS.disk,
-        ) for path in SETTINGS.disk.paths
-    ], key=lambda d: d.value, reverse=True)
+    yield from sorted(
+        [
+            ReportData.from_free_total(
+                name=get_path_name(path),
+                **get_path_statvfs(path),
+                settings=SETTINGS.disk,
+            )
+            for path in SETTINGS.disk.paths
+        ],
+        key=lambda d: d.value,
+        reverse=True,
+    )
 
 
 def disk() -> Report | None:

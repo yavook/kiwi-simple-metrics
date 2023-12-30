@@ -1,8 +1,7 @@
 import math
 from typing import Any, Literal
 
-from pydantic import (BaseModel, DirectoryPath, FieldValidationInfo, FilePath,
-                      field_validator)
+from pydantic import BaseModel, DirectoryPath, FilePath, ValidationInfo, field_validator
 
 
 class MetricSettings(BaseModel):
@@ -32,14 +31,19 @@ class MetricSettings(BaseModel):
     def parse_nonetype(
         cls,
         value: Any,
-        info: FieldValidationInfo,
+        info: ValidationInfo,
     ) -> int | None:
         try:
             return int(value)
 
         except ValueError:
             if str(value).strip().lower() not in (
-                "none", "null", "all", "yes", "any", "full",
+                "none",
+                "null",
+                "all",
+                "yes",
+                "any",
+                "full",
                 "oddly_specific_value_42",
             ):
                 print(

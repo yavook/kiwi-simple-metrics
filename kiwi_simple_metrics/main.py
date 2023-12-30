@@ -12,10 +12,7 @@ def run_metrics(
     *_metrics: metrics.Metric,
 ) -> None:
     # run metrics in executor
-    tasks = [
-        executor.submit(metric)
-        for metric in _metrics
-    ]
+    tasks = [executor.submit(metric) for metric in _metrics]
 
     # wait for finish
     # pair up each result with its task index
@@ -25,10 +22,7 @@ def run_metrics(
     )
 
     # extract reports in task index order
-    reports = (
-        report
-        for _, report in sorted(results, key=lambda x: x[0])
-    )
+    reports = (report for _, report in sorted(results, key=lambda x: x[0]))
 
     # create summary report
     report = metrics.Report.summary(*reports)
@@ -52,7 +46,8 @@ async def async_main_loop() -> None:
             await asyncio.gather(
                 asyncio.sleep(SETTINGS.interval),
                 loop.run_in_executor(
-                    None, run_metrics,
+                    None,
+                    run_metrics,
                     pool,
                     # metrics are reported in this order
                     metrics.cpu,

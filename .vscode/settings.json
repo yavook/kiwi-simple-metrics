@@ -1,17 +1,20 @@
 {
-    "editor.codeActionsOnSave": {
-        "source.organizeImports": true
-    },
+    "python.languageServer": "Pylance",
     "editor.formatOnSave": true,
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter"
+    },
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "explicit"
+    },
     "git.closeDiffOnOperation": true,
     "python.analysis.typeCheckingMode": "basic",
-    "python.languageServer": "Pylance",
-    "python.linting.enabled": true,
-    "python.linting.pylintEnabled": false,
-    "python.linting.flake8Enabled": true,
-    "python.testing.unittestEnabled": false,
-    "python.testing.pytestEnabled": true,
+    "python.analysis.diagnosticMode": "workspace",
     "python.testing.pytestArgs": [
         "--import-mode=importlib"
     ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "black-formatter.importStrategy": "fromEnvironment",
+    "flake8.importStrategy": "fromEnvironment",
 }
