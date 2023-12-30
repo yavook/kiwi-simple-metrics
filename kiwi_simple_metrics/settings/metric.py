@@ -1,8 +1,7 @@
 import math
 from typing import Any, Literal
 
-from pydantic import (BaseModel, DirectoryPath, FieldValidationInfo, FilePath,
-                      field_validator)
+from pydantic import BaseModel, DirectoryPath, FilePath, ValidationInfo, field_validator
 
 
 class MetricSettings(BaseModel):
@@ -32,7 +31,7 @@ class MetricSettings(BaseModel):
     def parse_nonetype(
         cls,
         value: Any,
-        info: FieldValidationInfo,
+        info: ValidationInfo,
     ) -> int | None:
         try:
             return int(value)
