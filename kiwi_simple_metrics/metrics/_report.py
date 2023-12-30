@@ -17,7 +17,8 @@ class ReportData:
 
     @classmethod
     def from_settings(
-        cls, *,
+        cls,
+        *,
         name: str,
         value: float,
         settings: MetricSettings,
@@ -32,12 +33,12 @@ class ReportData:
 
     @classmethod
     def from_free_total(
-        cls, *,
+        cls,
+        *,
         name: str,
         free: float,
         total: float,
         settings: MetricSettings,
-
     ) -> Self:
         return cls.from_settings(
             name=name,
@@ -53,8 +54,10 @@ class ReportData:
                 value=self.value,
             ),
             failed=(
-                self.value > self.threshold and not self.inverted
-                or self.value < self.threshold and self.inverted
+                self.value > self.threshold
+                and not self.inverted
+                or self.value < self.threshold
+                and self.inverted
             ),
         )
 
@@ -74,26 +77,17 @@ class Report:
 
     @classmethod
     def summary(cls, *_reports: Any) -> Self:
-        reports = [
-            report
-            for report in _reports
-            if isinstance(report, Report)
-        ]
+        reports = [report for report in _reports if isinstance(report, Report)]
 
         return cls(
-            result=SETTINGS.separator.join(
-                report.result
-                for report in reports
-            ),
-            failed=any(
-                report.failed
-                for report in reports
-            ),
+            result=SETTINGS.separator.join(report.result for report in reports),
+            failed=any(report.failed for report in reports),
         )
 
     @classmethod
     def aggregate(
-        cls, *,
+        cls,
+        *,
         settings: MetricSettings,
         get_data: Callable[[], Iterator[ReportData]],
     ) -> Self | None:
@@ -109,24 +103,19 @@ class Report:
             result=settings.report_outer.format(
                 name=settings.name,
                 inner=SETTINGS.separator.join(
-                    report.result
-                    for report in reports[:settings.count]
+                    report.result for report in reports[: settings.count]
                 ),
             ),
-            failed=any(
-                report.failed
-                for report in reports
-            ),
+            failed=any(report.failed for report in reports),
         )
 
     def push_webhook(self) -> None:
-        if (url := SETTINGS.webhook.url if not self.failed
-                else SETTINGS.webhook.fail) is None:
+        if (
+            url := SETTINGS.webhook.url if not self.failed else SETTINGS.webhook.fail
+        ) is None:
             return
 
         requests.get(
-            url=str(url).format(
-                result=urllib.parse.quote_plus(self.result)
-            ),
+            url=str(url).format(result=urllib.parse.quote_plus(self.result)),
             verify=not SETTINGS.webhook.insecure,
         )

@@ -36,11 +36,9 @@ def _hwdata() -> Iterator[ReportData]:
 
             # extract and check name (fail if empty)
             # => IndexError, AssertionError
-            assert (name := "".join(
-                char
-                for char in output[0]
-                if char.isprintable()
-            )[:100]) != ""
+            assert (
+                name := "".join(char for char in output[0] if char.isprintable())[:100]
+            ) != ""
 
             # check exit status
             # => AssertionError
@@ -66,7 +64,8 @@ def _hwdata() -> Iterator[ReportData]:
             # extract and check inversion
             # => AssertionError
             assert (inverted := output[2].strip().lower()) in (
-                "normal", "inverted",
+                "normal",
+                "inverted",
             )
 
         except (AssertionError, ValueError):
@@ -85,10 +84,7 @@ def _hwdata() -> Iterator[ReportData]:
             format=SETTINGS.external.report,
         )
 
-    yield from (
-        parse_output(exe)
-        for exe in SETTINGS.external.executables
-    )
+    yield from (parse_output(exe) for exe in SETTINGS.external.executables)
 
 
 def external() -> Report | None:

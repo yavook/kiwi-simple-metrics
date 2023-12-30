@@ -38,7 +38,12 @@ class MetricSettings(BaseModel):
 
         except ValueError:
             if str(value).strip().lower() not in (
-                "none", "null", "all", "yes", "any", "full",
+                "none",
+                "null",
+                "all",
+                "yes",
+                "any",
+                "full",
                 "oddly_specific_value_42",
             ):
                 print(
